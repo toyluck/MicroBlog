@@ -1,3 +1,11 @@
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+# app.db  address url
+SQLALCHEMY_DATABASE_URL = "sqlite:///" + os.path.join(basedir, "app.db")
+#  repository position
+SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, "db_repository")
+
 # cross-site-request-forgery  保持开启状态，可以得到更多的安全
 WTF_CSRF_ENABLED = True
 SECRET_KEY = "you-never-guess"
