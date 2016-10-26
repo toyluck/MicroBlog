@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    <script type="text/javascript">
+        function set_openid(name, url) {
+            u = url.search('<username>');
+            if (u != -1) {
+                // open a dialog to input some data
+                user = prompt("Enter your " + name + ' username');
+                url = url.substr(0, u) + user
+            }
+
+            form = document.forms['login'];
+
+            form.elements['openid'].value = url
+        }
+    </script>
+    <h1>Sign in</h1>
+    <form action="" method="post" name="login">
+        {#    The form.hidden_tag() template argument will get replaced with a hidden field that
+        implements the CSRF prevention that we enabled in the configuration. This field needs to be in
+        all your forms if you have CSRF enabled. The good news is that Flask-WTF handles it for us,
+        we just need to make sure it is included in the form.#}
+        {{ form.hidden_tag() }}
+        <p>
+            Please input your openid Or just select one of the provides below:<br>
+            {#        这样看起来应该是生成了 一段html代码  print（）#}
+            {{ form.openid(size=80) }} <br>
+
+            {% for error in form.openid.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+            |{% for provider in providers %}
+            <a href="javascript:set_openid('{{ provider.name }}' , '{{ provider.url }}')">{{ provider.name }}</a>|
+             {% endfor %}
+
+        </p>
+        <p>
+            {{ form.remember_me }}Remember Me!
+        </p>
+        <input type="submit" value="Sign in">
+    </form>
+{% endblock %}
